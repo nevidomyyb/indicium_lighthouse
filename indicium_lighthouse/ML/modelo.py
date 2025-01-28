@@ -4,7 +4,7 @@ from sklearn.model_selection import train_test_split
 from sklearn.ensemble import RandomForestRegressor
 from sklearn.metrics import mean_absolute_error, mean_squared_error, r2_score
 import pickle
-
+from random import randint
 def model():
     df, _ = get_dados()
     
@@ -13,6 +13,14 @@ def model():
     
     X = pd.get_dummies(X, drop_first=True)
     X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+    
+    param_dist = {
+        'n_estimators': randint(50, 200),
+        'max_depth': [None, 10, 20, 30],
+        'min_samples_split': randint(2, 10),
+        'min_samples_leaf': randint(1, 5),
+        'max_features': ['sqrt', 'log2', None]
+    }
     
     model = RandomForestRegressor(
         n_estimators=100,
@@ -40,8 +48,13 @@ def model():
 
     print(feature_importances.head(10))
     
+    model_dict = {
+        "model": model,
+        "feature_names": X.columns.tolist()
+    }
+    
     with open('random_forest_model.pkl', 'wb') as f:
-        pickle.dump(model, f)
+        pickle.dump(model_dict, f)
     
 if __name__ == "__main__":
     model()
