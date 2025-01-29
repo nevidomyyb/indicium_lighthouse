@@ -1,5 +1,5 @@
 import pandas as pd
-from limpeza_dados import get_dados
+from indicium_lighthouse.EDA.limpeza_dados import get_dados
 import matplotlib.pyplot as plt
 import numpy as np
 
@@ -10,6 +10,7 @@ def calc_rentabilidade(series):
 
 def eda_bairro():
     data, _ = get_dados()
+    data = data[(data['disponibilidade_365'] != 0) & (data['price'] != 0)]
     data_price_bairro = data.groupby('bairro_group')['price'].agg(
         preco_medio='mean',
         desvio_padrao_preco='std',
@@ -39,7 +40,7 @@ def eda_bairro():
         "preco_maximo": "Preço Máximo",
         "quantidade_imoveis": "Quantidade de Imóveis",
         "disponibilidade_media": "Disponibilidade Média",
-        "rentabilidade_potencial": "Potêncial de Rentabilidade (R$)"
+        "rentabilidade_potencial": "Potencial de Rentabilidade (U$)"
     }, axis=1)
     
     
@@ -59,7 +60,7 @@ def eda_bairro():
     width = 0.25 
     multiplier = 0
     bairros = data_price_bairro['Bairro'].values
-    valores = data_price_bairro[['Preço Médio', 'Potêncial de Rentabilidade (R$)', 'Quantidade de Imóveis']]
+    valores = data_price_bairro[['Preço Médio', 'Potencial de Rentabilidade (U$)', 'Quantidade de Imóveis']]
     x = np.arange(len(bairros))
 
     for coluna, valor in valores.items():
@@ -68,7 +69,7 @@ def eda_bairro():
         multiplier += 1
 
     ax1.set_ylabel('Valor')
-    ax1.set_title('Preço Médio, Potêncial de Rentabilidade e Quantidade de Imóveis por Bairro')
+    ax1.set_title('Preço Médio, Potencial de Rentabilidade e Quantidade de Imóveis por Bairro')
     ax1.set_xticks(x + width, bairros)
     ax1.set_xticklabels(bairros, rotation=45, ha="right")
     ax1.legend(loc='upper left', ncols=3)

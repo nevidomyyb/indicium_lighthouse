@@ -1,9 +1,10 @@
-from limpeza_dados import get_dados
+from indicium_lighthouse.EDA.limpeza_dados import get_dados
 import matplotlib.pyplot as plt
 import pandas as pd
-from utils import criar_tabela
+from indicium_lighthouse.EDA.utils import criar_tabela
 def eda_disponibilidade_noites():
     data, _ = get_dados()
+    data = data[(data['disponibilidade_365'] != 0) & (data['price'] != 0)]
     
     limites = [0, 50, 100, 250, 300, 365]
     data['intervalo_disponibilidade_365'] = pd.cut(data['disponibilidade_365'], bins=limites, right=True, include_lowest=True)

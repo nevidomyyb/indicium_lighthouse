@@ -11,7 +11,7 @@ def wrap_labels(labels, width= 20):
     return [textwrap.fill(label, width=width) for label in labels]
 
 data, _ = get_dados()
-
+data = data[(data['disponibilidade_365'] != 0) & (data['price'] != 0)]
 fig, (ax, ax1) = plt.subplots(2,1)
 
 vectorizer = CountVectorizer(stop_words='english', max_features=20)

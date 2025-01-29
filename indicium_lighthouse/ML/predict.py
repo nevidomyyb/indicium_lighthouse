@@ -1,17 +1,13 @@
 import pickle
 import pandas as pd
 
-with open('./random_forest_model.pkl', 'rb') as file:
-    model_dict_retreino_sem_randomsearch = pickle.load(file)
+with open('./random_forest_v7.pkl', 'rb') as file:
+    MODEL = pickle.load(file)
 
-with open('./random_forest_model_v2_randomized_search.pkl', 'rb') as file:
-    model_dict_randomsearch = pickle.load(file)
 
-model_re = model_dict_retreino_sem_randomsearch["model"]
-feature_names_re = model_dict_retreino_sem_randomsearch["feature_names"]
+model_re = MODEL["model"]
+feature_names_re = MODEL["feature_names"]
 
-model_randomsearch = model_dict_randomsearch["model"]
-feature_names_randomsearch = model_dict_randomsearch["feature_names"]
 data = {
     'id': 2595,
     'nome': 'Skylit Midtown Castle',
@@ -34,9 +30,3 @@ input_df = pd.get_dummies(input_df, drop_first=True)
 input_df = input_df.reindex(columns=feature_names_re, fill_value=0)
 prediction = model_re.predict(input_df)
 print(f"Predicted price with retrained model without reandomsearch: {prediction[0]:.2f}")
-
-input_df = pd.DataFrame([data])
-input_df = pd.get_dummies(input_df, drop_first=True)
-input_df = input_df.reindex(columns=feature_names_randomsearch, fill_value=0)
-prediction = model_randomsearch.predict(input_df)
-print(f"Predicted price with model with reandomsearch: {prediction[0]:.2f}")
